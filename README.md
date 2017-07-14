@@ -42,7 +42,7 @@ The cli parameters to run tests is this:
 `[branch name]` is the remote branch you want to test. **Default: 3.0**  
 `[test file]` is the test file in case you want to run only one specific test. If it was not specified, it will assume all tests in the `t` directory (`t/*`)
 
-For the examples I'll assume you have download all MySQL versions using the `download_mysql.sh` script.  
+For the examples I'll assume you have downloaded all MySQL versions using the `download_mysql.sh` script.  
 
 #### Examples:  
 1) Running all tests for the **3.0** branch using **MySQL 5.7.18**:  
@@ -57,12 +57,12 @@ docker run --rm -v ${HOME}/mysql/ps-5.7.18:/tmp/mysql toolkit-test PT-91-MySQL-5
 
 3) Running only tests in the **t/pt-online-schema-change/** directory, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
 ```
-docker run --rm ${HOME}/mysql/ps-5.7.18:/tmp/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/*
+docker run --rm ${HOME}/mysql/my-5.7.18:/tmp/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/*
 ```
 
 4) Running only the tests in `t/pt-online-schema-change/preserve-triggers.t`, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
 ```
-docker run --rm ${HOME}/mysql/ps-5.7.18:/tmp/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/preserve-triggers.t
+docker run --rm ${HOME}/mysql/my-5.7.18:/tmp/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/preserve-triggers.t
 ```
 
 5) Running tests for **MariaDB**:
