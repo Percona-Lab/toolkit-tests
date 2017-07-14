@@ -40,8 +40,31 @@ for abbrev in ${!files[@]}; do
         else 
             echo "${tarfile} already exists. Skipping download"
         fi
-        tar xvzf ${tarfile}
-        # Rename it to its abbrev. 
+        # This tar command is a copy from the make-barebones utility from the toolkit
+        # It extracts only the minimum files required to run the toolkit tests.
+        tar xvzf ${tarfile} \
+            --wildcards \
+            "$original_dirname/COPYING" \
+            "$original_dirname/README" \
+            "$original_dirname/share/errmsg*" \
+            "$original_dirname/share/charset*" \
+            "$original_dirname/share/english*" \
+            "$original_dirname/share/mysql/errmsg*" \
+            "$original_dirname/share/mysql/charset*" \
+            "$original_dirname/share/mysql/english*" \
+            "$original_dirname/bin/my_print_defaults" \
+            "$original_dirname/bin/mysql" \
+            "$original_dirname/bin/mysqld" \
+            "$original_dirname/bin/mysqladmin" \
+            "$original_dirname/bin/mysqlbinlog" \
+            "$original_dirname/bin/mysqldump" \
+            "$original_dirname/bin/mysqld" \
+            "$original_dirname/bin/mysqld_safe" \
+            "$original_dirname/bin/safe_mysqld" \
+            "$original_dirname/lib/libgalera_smm.so" \
+            "$original_dirname/bin/clustercheck" \
+            "$original_dirname/bin/wsrep*"
+        # Rename it to its abbreviation. 
         # Example: the directory Percona-Server-5.7.18-15-Linux.x86_64.ssl100 will be renamed to ps-5.7.18
         mv ${original_dirname} ${new_dirname}
         rm ${tarfile}
