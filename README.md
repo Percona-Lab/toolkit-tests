@@ -11,7 +11,7 @@ MySQL server: `5.7.18`, `5.6.36`, `5.5.56`, `8.0.1`
 MariaDB: `10.2.7`, `10.1.25`, `10.0.31`  
 Percona XtraDB Cluster: `5.7.18`, `5.6.36`, `5.5.41`  
 
-After running the script, you will have this directories at `${HOME}/mysql`:  
+After running the script, you will have these directories at `${HOME}/mysql`:  
 ```
 tree ${HOME}/mysql -d -L 1
 .
