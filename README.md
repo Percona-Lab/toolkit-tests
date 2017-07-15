@@ -31,42 +31,26 @@ tree ${HOME}/mysql -d -L 1
 ```
 
 This script will make MySQL *barebones* resulting in much smaller directories having only the necessary files to start MySQL and run the Toolkit tests.  
-For example, this is the disk usage after extracting the original tar.gz files:  
+
 ```
-du -ch -d 1 | sort -k 2
-891M    ./mdb-10.0.31
-1,4G    ./mdb-10.1.25
-1,6G    ./mdb-10.2.7
-597M    ./my-5.5.56
-915M    ./my-5.6.36
-1,3G    ./my-5.7.18
-1,3G    ./my-8.0.1
-210M    ./ps-5.5.55
-738M    ./ps-5.6.36
-600M    ./ps-5.7.18
-481M    ./pxc-5.5.41
-341M    ./pxc-5.6.36
-1,2G    ./pxc-5.7.18
-12G     total
-```
-  
-while the barebones use:
-```
-du -ch -d 1 | sort -k 2
-124M    ./mdb-10.0.31
-133M    ./mdb-10.1.25
-163M    ./mdb-10.2.7
-79M     ./my-5.5.56
-114M    ./my-5.6.36
-290M    ./my-5.7.18
-422M    ./my-8.0.1
-86M     ./ps-5.5.55
-125M    ./ps-5.6.36
-63M     ./ps-5.7.18
-107M    ./pxc-5.5.41
-161M    ./pxc-5.6.36
-316M    ./pxc-5.7.18
-2,2G    total
+Regular MySQL files disk usage                     Disk usage as barebones
+
+   du -ch -d 4 | sort -k 2                         du -ch -d 1 | sort -k 2  
+   892M    ./mdb-10.0.31                           124M    ./mdb-10.0.31    
+   1,4G    ./mdb-10.1.25                           133M    ./mdb-10.1.25    
+   1,6G    ./mdb-10.2.7                            163M    ./mdb-10.2.7     
+   597M    ./my-5.5.56                             79M     ./my-5.5.56      
+   915M    ./my-5.6.36                             114M    ./my-5.6.36      
+   1,3G    ./my-5.7.18                             290M    ./my-5.7.18      
+   1,3G    ./my-8.0.1                              422M    ./my-8.0.1       
+   210M    ./ps-5.5.55                             86M     ./ps-5.5.55      
+   738M    ./ps-5.6.36                             125M    ./ps-5.6.36      
+   600M    ./ps-5.7.18                             63M     ./ps-5.7.18      
+   481M    ./pxc-5.5.41                            107M    ./pxc-5.5.41     
+   341M    ./pxc-5.6.36                            161M    ./pxc-5.6.36     
+   1,2G    ./pxc-5.7.18                            316M    ./pxc-5.7.18     
+   12G     total                                   2,2G    total            
+
 ```
   
 ### Building the image

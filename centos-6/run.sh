@@ -9,7 +9,7 @@ echo "Tests: $TEST"
 BASE_DIR='/home/testuser/golang/src/github.com/percona/percona-toolkit/'
 cd $BASE_DIR
 
-echo "Starting sandbox ..."
+echo "Starting the sandbox ..."
 sandbox/test-env start
 if [ $? -ne 0 ]; then
     echo 'Error: cannot start the sandbox'
