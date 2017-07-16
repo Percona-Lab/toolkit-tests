@@ -9,6 +9,9 @@ echo "Tests: $TEST"
 BASE_DIR='/home/testuser/golang/src/github.com/percona/percona-toolkit/'
 cd $BASE_DIR
 
+echo "Deleting all files in /tmp"
+rm -rf /tmp/*
+
 echo "Starting the sandbox ..."
 sandbox/test-env start
 if [ $? -ne 0 ]; then

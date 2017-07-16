@@ -57,10 +57,22 @@ Regular MySQL files disk usage                     Disk usage as barebones
 
 Just build it as any other image: `docker build --tag=toolkit-test .`  
 
+### Mount points
+There are 2 mount points avaible in the containters:  
+`/mysql`: Directory having MySQL binaries (**Mandatory**) *See examples below*  
+`/tmp`: Linux temporary directory. This mount point can be used to mount the `/tmp` directory into a [tmpfs](http://manpages.ubuntu.com/manpages/zesty/man5/tmpfs.5.html). Using `tmps` will drastically increase the testing speed since all database creation/load/drop will happen in memory.  
+
+#### Try /tmp on tmpfs                                 
+To mount `/tmp` on `tmps` simply run these commands:  
+```
+echo "tmpfs /tmp tmpfs rw,nosuid,nodev" | sudo tee -a /etc/fstab
+sudo reboot
+```
+
 ### Running tests 
 
 The cli parameters to run tests is this:  
-`docker run --rm -v <path_to_mysql_version>:/tmp/mysql toolkit-test [branch name] [test file]`  
+`docker run --rm -v <path_to_mysql_version>:/mysql toolkit-test [branch name] [test file]`  
 
 `[branch name]` is the remote branch you want to test. **Default: 3.0**  
 `[test file]` is the test file in case you want to run only one specific test. If it was not specified, it will assume all tests in the `t` directory (`t/*`)
@@ -70,28 +82,28 @@ For the examples I'll assume you have downloaded all MySQL versions using the `d
 #### Examples:  
 1) Running all tests for the **3.0** branch using **MySQL 5.7.18**:  
 ```
-docker run --rm -v ${HOME}/mysql/my-5.7.18:/tmp/mysql toolkit-test
+docker run --rm -v ${HOME}/mysql/my-5.7.18:/mysql toolkit-test
 ```  
   
 2) Running all tests for the **PT-91-MySQL-5.7** branch using **Percona Server 5.7.18**:  
 ```
-docker run --rm -v ${HOME}/mysql/ps-5.7.18:/tmp/mysql toolkit-test PT-91-MySQL-5.7
+docker run --rm -v ${HOME}/mysql/ps-5.7.18:/mysql toolkit-test PT-91-MySQL-5.7
 ```
 
 3) Running only tests in the **t/pt-online-schema-change/** directory, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
 ```
-docker run --rm ${HOME}/mysql/my-5.7.18:/tmp/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/*
+docker run --rm ${HOME}/mysql/my-5.7.18:/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/*
 ```
 
 4) Running only the tests in `t/pt-online-schema-change/preserve-triggers.t`, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
 ```
-docker run --rm ${HOME}/mysql/my-5.7.18:/tmp/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/preserve-triggers.t
+docker run --rm ${HOME}/mysql/my-5.7.18:/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/preserve-triggers.t
 ```
 
 5) Running tests for **MariaDB**:
 In this case we need to specify the `FORK` variable to let the sandbox know we are not using a fork. (Percona server doesn't need this variable since it is a drop-in replacement of MySQL)
 ```
-docker run --rm -e "FORK=mariadb" -v ${HOME}/mysql/mdb-10.2.7:/tmp/mysql toolkit-test
+docker run --rm -e "FORK=mariadb" -v ${HOME}/mysql/mdb-10.2.7:/mysql toolkit-test
 ```
   
   

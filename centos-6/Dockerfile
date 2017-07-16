@@ -4,7 +4,7 @@ MAINTAINER Carlos Salguero <carlos.salguero@percona.com>
 
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/testuser/golang/bin/:/root/perl5/bin" \
     GOPATH="/home/testuser/golang" \
-    PERCONA_TOOLKIT_SANDBOX="/tmp/mysql" \
+    PERCONA_TOOLKIT_SANDBOX="/mysql" \
     PERCONA_TOOLKIT_BRANCH="/home/testuser/golang/src/github.com/percona/percona-toolkit" \
     PERCONA_SLOW_BOX=1 \
     PERL_LOCAL_LIB_ROOT="$PERL_LOCAL_LIB_ROOT:/root/perl5" \
@@ -37,7 +37,7 @@ RUN yum clean all && \
     yum clean all && \
     rm -rf /tmp/* && \
 # In this directory we will mount the directory having the MySQL binaries && \
-    mkdir -p /tmp/mysql && \
+    mkdir -p /mysql && \
     chmod -R 777 /tmp
 
 USER testuser
@@ -48,5 +48,7 @@ RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/gola
     go install github.com/Masterminds/glide 
 
 WORKDIR /home/testuser
+
+VOLUME [ "/mysql", "/tmp" ]
 
 ENTRYPOINT ["/home/testuser/run.sh"]
