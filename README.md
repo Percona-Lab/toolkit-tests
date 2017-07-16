@@ -106,6 +106,16 @@ In this case we need to specify the `FORK` variable to let the sandbox know we a
 docker run --rm -e "FORK=mariadb" -v ${HOME}/mysql/mdb-10.2.7:/mysql toolkit-test
 ```
   
+6) Using `tmpfs`:
+   In case your `/tmp` directory is mounted on a `tmpfs`, you can set up a directory from your host, to be used by the container.  Example:
+
+```
+mkdir /tmp/toolkit-test-tmp
+docker run --rm -v ${HOME}/mysql/my-5.7.18:/mysql -v /tmp/toolkit-test-tmp:/tmp toolkit-test
+```
+This will mount the directory `/tmp/toolkit-test-tmp` from the host into `/tmp` inside the container.  
+Since your local's `/tmp` is mouted on a *tmpfs*, `/tmp` in the cotainer will also be mounted on the *tmpfs* so, all operations on the testing databases will run much faster.  
+
   
 **Notes**  
 1) In these examples I am using the `--rm` because I don't need to keep the container.  
