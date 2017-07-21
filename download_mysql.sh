@@ -7,9 +7,12 @@ declare -A files
 
 files=(\
 # Percona server
-    ["ps-5.7.18"]="https://www.percona.com/downloads/Percona-Server-LATEST/Percona-Server-5.7.18-15/binary/tarball/Percona-Server-5.7.18-15-Linux.x86_64.ssl100.tar.gz" \
-    ["ps-5.6.36"]="https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-5.6.36-82.0/binary/tarball/Percona-Server-5.6.36-rel82.0-Linux.x86_64.ssl100.tar.gz" \
-    ["ps-5.5.55"]="https://www.percona.com/downloads/Percona-Server-5.5/Percona-Server-5.5.55-38.8/binary/tarball/Percona-Server-5.5.55-rel38.8-Linux.x86_64.ssl100.tar.gz" \
+    ["ps-5.7.18-debian"]="https://www.percona.com/downloads/Percona-Server-5.7/Percona-Server-5.7.18-15/binary/tarball/Percona-Server-5.7.18-15-Linux.x86_64.ssl100.tar.gz" \
+    ["ps-5.6.36-debian"]="https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-5.6.36-82.0/binary/tarball/Percona-Server-5.6.36-rel82.0-Linux.x86_64.ssl100.tar.gz" \
+    ["ps-5.5.55-debian"]="https://www.percona.com/downloads/Percona-Server-5.5/Percona-Server-5.5.55-38.8/binary/tarball/Percona-Server-5.5.55-rel38.8-Linux.x86_64.ssl100.tar.gz" \
+    ["ps-5.7.18-centos"]="https://www.percona.com/downloads/Percona-Server-5.7/Percona-Server-5.7.18-15/binary/tarball/Percona-Server-5.7.18-15-Linux.x86_64.ssl101.tar.gz" \
+    ["ps-5.6.36-centos"]="https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-5.6.36-82.0/binary/tarball/Percona-Server-5.6.36-rel82.0-Linux.x86_64.ssl101.tar.gz" \
+    ["ps-5.5.55-centos"]="https://www.percona.com/downloads/Percona-Server-5.5/Percona-Server-5.5.55-38.8/binary/tarball/Percona-Server-5.5.55-rel38.8-Linux.x86_64.ssl101.tar.gz" \
 # MySQL server
     ["my-5.7.18"]="https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.18-linux-glibc2.5-x86_64.tar.gz" \
     ["my-5.6.36"]="https://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.36-linux-glibc2.5-x86_64.tar.gz" \
@@ -20,8 +23,10 @@ files=(\
     ["mdb-10.1.25"]="http://mirror.upb.edu.co/mariadb//mariadb-10.1.25/bintar-linux-x86_64/mariadb-10.1.25-linux-x86_64.tar.gz" \
     ["mdb-10.0.31"]="http://mirror.upb.edu.co/mariadb//mariadb-10.0.31/bintar-linux-x86_64/mariadb-10.0.31-linux-x86_64.tar.gz" \
 # Percona XtraDB Cluster
-    ["pxc-5.7.18"]="https://www.percona.com/downloads/Percona-XtraDB-Cluster-LATEST/Percona-XtraDB-Cluster-5.7.18-29.20/binary/tarball/Percona-XtraDB-Cluster-5.7.18-rel15-29.20.1.Linux.x86_64.ssl100.tar.gz" \
-    ["pxc-5.6.36"]="https://www.percona.com/downloads/Percona-XtraDB-Cluster-56/Percona-XtraDB-Cluster-5.6.36-26.20/binary/tarball/Percona-XtraDB-Cluster-5.6.36-rel82.0-26.20.1.Linux.x86_64.ssl100.tar.gz" \
+    ["pxc-5.7.18-debian"]="https://www.percona.com/downloads/Percona-XtraDB-Cluster-57/Percona-XtraDB-Cluster-5.7.18-29.20/binary/tarball/Percona-XtraDB-Cluster-5.7.18-rel15-29.20.1.Linux.x86_64.ssl100.tar.gz" \
+    ["pxc-5.6.36-debian"]="https://www.percona.com/downloads/Percona-XtraDB-Cluster-56/Percona-XtraDB-Cluster-5.6.36-26.20/binary/tarball/Percona-XtraDB-Cluster-5.6.36-rel82.0-26.20.1.Linux.x86_64.ssl100.tar.gz" \
+    ["pxc-5.7.18-centos"]="https://www.percona.com/downloads/Percona-XtraDB-Cluster-57/Percona-XtraDB-Cluster-5.7.18-29.20/binary/tarball/Percona-XtraDB-Cluster-5.7.18-rel15-29.20.1.Linux.x86_64.ssl101.tar.gz" \
+    ["pxc-5.6.36-centos"]="https://www.percona.com/downloads/Percona-XtraDB-Cluster-56/Percona-XtraDB-Cluster-5.6.36-26.20/binary/tarball/Percona-XtraDB-Cluster-5.6.36-rel82.0-26.20.1.Linux.x86_64.ssl101.tar.gz" \
     ["pxc-5.5.41"]="https://www.percona.com/downloads/Percona-XtraDB-Cluster-55/Percona-XtraDB-Cluster-5.5.41-25.12/binary/tarball/Percona-XtraDB-Cluster-5.5.41-rel37.0-25.11.853.Linux.x86_64.tar.gz" \
 )
 
