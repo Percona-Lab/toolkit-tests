@@ -20,7 +20,7 @@ RUN yum clean all && \
     yum upgrade -y && \
     yum install -y deltarpm && \
     yum groupinstall -y 'Development Tools' && \
-    yum install -y git perl-devel perl-core perl-CPAN perl-DBI perl-DBD-MySQL libdbi-dbd-mysql libaio libaio-devel && \
+    yum install -y git perl-devel perl-core perl-CPAN perl-DBI perl-DBD-MySQL libdbi-dbd-mysql libaio libaio-devel numactl-libs && \
 # Install Perl dependencies && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install JSON' && \
