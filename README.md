@@ -72,8 +72,9 @@ sudo reboot
 ### Running tests 
 
 The cli parameters to run tests is this:  
-`docker run --rm -v <path_to_mysql_version>:/mysql toolkit-test [branch name] [test file]`  
+`docker run --rm -v <path_to_mysql_version>:/mysql toolkit-test [repo url] [branch name] [test file]`  
 
+`[repo url]` is the remote repository having the branch you want to test. **Default: origin**  
 `[branch name]` is the remote branch you want to test. **Default: 3.0**  
 `[test file]` is the test file in case you want to run only one specific test. If it was not specified, it will assume all tests in the `t` directory (`t/*`)
 
@@ -87,26 +88,31 @@ docker run --rm -v ${HOME}/mysql/my-5.7.18:/mysql toolkit-test
   
 2) Running all tests for the **PT-91-MySQL-5.7** branch using **Percona Server 5.7.18**:  
 ```
-docker run --rm -v ${HOME}/mysql/ps-5.7.18:/mysql toolkit-test PT-91-MySQL-5.7
+docker run --rm -v ${HOME}/mysql/ps-5.7.18:/mysql toolkit-test origin PT-91-MySQL-5.7
 ```
 
-3) Running only tests in the **t/pt-online-schema-change/** directory, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
+3) Running all tests for the **test-branch** branch from a fork:  
 ```
-docker run --rm ${HOME}/mysql/my-5.7.18:/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/*
-```
-
-4) Running only the tests in `t/pt-online-schema-change/preserve-triggers.t`, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
-```
-docker run --rm ${HOME}/mysql/my-5.7.18:/mysql toolkit-test PT-91-MySQL-5.7 t/pt-online-schema-change/preserve-triggers.t
+docker run --rm -v ${HOME}/mysql/ps-5.7.18:/mysql toolkit-test https://github.com/some_fork_name/percona-toolkit.git test-branch
 ```
 
-5) Running tests for **MariaDB**:
+4) Running only tests in the **t/pt-online-schema-change/** directory, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
+```
+docker run --rm ${HOME}/mysql/my-5.7.18:/mysql toolkit-test origin PT-91-MySQL-5.7 t/pt-online-schema-change/*
+```
+
+5) Running only the tests in `t/pt-online-schema-change/preserve-triggers.t`, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
+```
+docker run --rm ${HOME}/mysql/my-5.7.18:/mysql toolkit-test origin PT-91-MySQL-5.7 t/pt-online-schema-change/preserve-triggers.t
+```
+
+6) Running tests for **MariaDB**:
 In this case we need to specify the `FORK` variable to let the sandbox know we are not using a fork. (Percona server doesn't need this variable since it is a drop-in replacement of MySQL)
 ```
 docker run --rm -e "FORK=mariadb" -v ${HOME}/mysql/mdb-10.2.7:/mysql toolkit-test
 ```
   
-6) Using `tmpfs`:
+7) Using `tmpfs`:
    In case your `/tmp` directory is mounted on a `tmpfs`, you can set up a directory from your host, to be used by the container.  Example:
 
 ```

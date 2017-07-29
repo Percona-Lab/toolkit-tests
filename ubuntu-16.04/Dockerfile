@@ -28,8 +28,6 @@ RUN apt update && \
 # Set owner & permissions sin previous step were run as root
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
-# Clone the Toolkit repo
-    git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
 # Clean up
     apt autoremove && \
     apt autoclean -y && \
@@ -40,6 +38,10 @@ RUN apt update && \
 
 USER testuser
 ADD run.sh /home/testuser/run.sh
+RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
+# Install Go dependencies manager (glide) & clone Percona Toolkit repo && \
+    go get github.com/Masterminds/glide && \
+    go install github.com/Masterminds/glide 
 
 WORKDIR /home/testuser
 
