@@ -14,18 +14,13 @@ ADD https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz /tmp/go.lin
 
 RUN apt update && \
     apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 && \
-# Install Perl dependencies
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install JSON' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'Net::Address::IP::Local' && \
-# We don't want to run everything as root
     adduser --disabled-password --gecos '' testuser && \
-# Install Go
     tar -C /usr/local -xzf /tmp/go.linux-amd64.tar.gz && \
-# Install Go dependencies manager (glide) & clone Percona Toolkit repo
     go get github.com/Masterminds/glide && \
     go install github.com/Masterminds/glide && \
-# Set owner & permissions sin previous step were run as root
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
 # Clean up
@@ -38,8 +33,8 @@ RUN apt update && \
 
 USER testuser
 ADD run.sh /home/testuser/run.sh
+# Install Go dependencies manager (glide) & clone Percona Toolkit repo && 
 RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
-# Install Go dependencies manager (glide) & clone Percona Toolkit repo && \
     go get github.com/Masterminds/glide && \
     go install github.com/Masterminds/glide 
 

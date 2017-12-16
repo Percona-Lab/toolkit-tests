@@ -3,34 +3,34 @@
 mkdir -p ${HOME}/mysql
 cd ${HOME}/mysql 
 
-rm -f get_download_link.sh
-wget https://raw.githubusercontent.com/Percona-QA/percona-qa/master/get_download_link.sh > /dev/null 2>&1 && chmod +x get_download_link.sh
+#rm -f get_download_link.sh
+#wget https://raw.githubusercontent.com/Percona-QA/percona-qa/master/get_download_link.sh > /dev/null 2>&1 && chmod +x get_download_link.sh
 
 declare -A files
 
 files=(\
 # Percona server
-    ["ps-5.7-debian"]="$(./get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --type=prod --distribution=ubuntu)" \
-    ["ps-5.6-debian"]="$(./get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --type=prod --distribution=ubuntu)" \
-    ["ps-5.5-debian"]="$(./get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --type=prod --distribution=ubuntu)" \
-    ["ps-5.7-centos"]="$(./get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --type=prod --distribution=centos)" \
-    ["ps-5.6-centos"]="$(./get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --type=prod --distribution=centos)" \
-    ["ps-5.5-centos"]="$(./get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --type=prod --distribution=centos)" \
+    ["ps-5.7-debian"]="$(./get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=ubuntu)" \
+    ["ps-5.6-debian"]="$(./get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=ubuntu)" \
+    ["ps-5.5-debian"]="$(./get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --distribution=ubuntu)" \
+#    ["ps-5.7-centos"]="$(./get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=centos)" \
+#    ["ps-5.6-centos"]="$(./get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=centos)" \
+#    ["ps-5.5-centos"]="$(./get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --distribution=centos)" \
 # MySQL server
-    ["my-5.7"]="$(./get_download_link.sh --product=mysql --version=5.7 --arch=x86_64 --type=prod)" \
-    ["my-5.6"]="$(./get_download_link.sh --product=mysql --version=5.6 --arch=x86_64 --type=prod)" \
-    ["my-5.5"]="$(./get_download_link.sh --product=mysql --version=5.5 --arch=x86_64 --type=prod)" \
-    ["my-8.0"]="$(./get_download_link.sh --product=mysql --version=8.0 --arch=x86_64 --type=prod)" \
+    ["my-5.7"]="$(./get_download_link.sh --product=mysql --version=5.7 --arch=x86_64 )" \
+    ["my-5.6"]="$(./get_download_link.sh --product=mysql --version=5.6 --arch=x86_64 )" \
+    ["my-5.5"]="$(./get_download_link.sh --product=mysql --version=5.5 --arch=x86_64 )" \
+    ["my-8.0"]="$(./get_download_link.sh --product=mysql --version=8.0 --arch=x86_64 )" \
 # MariaDB
-    ["mdb-10.2"]="$(./get_download_link.sh --product=mariadb --version=10.2 --arch=x86_64 --type=prod)" \
-    ["mdb-10.1"]="$(./get_download_link.sh --product=mariadb --version=10.1 --arch=x86_64 --type=prod)" \
-    ["mdb-10.0"]="$(./get_download_link.sh --product=mariadb --version=10.0 --arch=x86_64 --type=prod)" \
+    ["mdb-10.2"]="$(./get_download_link.sh --product=mariadb --version=10.2 --arch=x86_64 )" \
+    ["mdb-10.1"]="$(./get_download_link.sh --product=mariadb --version=10.1 --arch=x86_64 )" \
+    ["mdb-10.0"]="$(./get_download_link.sh --product=mariadb --version=10.0 --arch=x86_64 )" \
 # Percona XtraDB Cluster
-    ["pxc-5.7-debian"]="$(./get_download_link.sh --product=pxc --version=5.7 --arch=x86_64 --type=prod --distribution=ubuntu)" \
-    ["pxc-5.6-debian"]="$(./get_download_link.sh --product=pxc --version=5.6 --arch=x86_64 --type=prod --distribution=ubuntu)" \
-    ["pxc-5.7-centos"]="$(./get_download_link.sh --product=pxc --version=5.7 --arch=x86_64 --type=prod --distribution=centos)" \
-    ["pxc-5.6-centos"]="$(./get_download_link.sh --product=pxc --version=5.6 --arch=x86_64 --type=prod --distribution=centos)" \
-    ["pxc-5.5"]="$(./get_download_link.sh --product=pxc --version=5.5 --arch=x86_64 --type=prod)" \
+    ["pxc-5.7-debian"]="$(./get_download_link.sh --product=pxc --version=5.7 --arch=x86_64 --distribution=ubuntu)" \
+    ["pxc-5.6-debian"]="$(./get_download_link.sh --product=pxc --version=5.6 --arch=x86_64 --distribution=ubuntu)" \
+#    ["pxc-5.7-centos"]="$(./get_download_link.sh --product=pxc --version=5.7 --arch=x86_64 --distribution=centos)" \
+#    ["pxc-5.6-centos"]="$(./get_download_link.sh --product=pxc --version=5.6 --arch=x86_64 --distribution=centos)" \
+    ["pxc-5.5"]="$(./get_download_link.sh --product=pxc --version=5.5 --arch=x86_64 )" \
 )
 
 for abbrev in ${!files[@]}; do
@@ -50,32 +50,40 @@ for abbrev in ${!files[@]}; do
         fi
         # This tar command is a copy from the make-barebones utility from the toolkit
         # It extracts only the minimum files required to run the toolkit tests.
-        tar xvzf ${tarfile} \
-            --wildcards \
-            "$original_dirname/COPYING" \
-            "$original_dirname/README" \
-            "$original_dirname/share/errmsg*" \
-            "$original_dirname/share/charset*" \
-            "$original_dirname/share/english*" \
-            "$original_dirname/share/mysql/errmsg*" \
-            "$original_dirname/share/mysql/charset*" \
-            "$original_dirname/share/mysql/english*" \
-            "$original_dirname/bin/my_print_defaults" \
-            "$original_dirname/bin/mysql" \
-            "$original_dirname/bin/mysqld" \
-            "$original_dirname/bin/mysqladmin" \
-            "$original_dirname/bin/mysqlbinlog" \
-            "$original_dirname/bin/mysqldump" \
-            "$original_dirname/bin/mysqld" \
-            "$original_dirname/bin/mysqld_safe" \
-            "$original_dirname/bin/safe_mysqld" \
-            "$original_dirname/lib/libgalera_smm.so" \
-            "$original_dirname/bin/clustercheck" \
-            "$original_dirname/bin/wsrep*"
+        #tar xvzf ${tarfile} "$original_dirname/"
+        #tar xvzf ${tarfile} \
+        #    --ignore-failed-read \
+        #    --ignore-command-error \
+        #    --wildcards \
+        tar xvzf ${tarfile} --wildcards "$original_dirname/COPYING*" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/README*" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/clustercheck" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/my_print_defaults" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysql" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqladmin" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqlbinlog" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqld" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqld" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqld_safe" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqldump" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/ps-admin" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/resolveip" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/safe_mysqld" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/wsrep*"
+        tar xvzf ${tarfile} --wildcards "$original_dirname/lib/*" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/scripts/mysql_install_db" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/share/*.sql" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/share/*.txt" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/share/charset*" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/share/english*" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/share/errmsg*"  
+        tar xvzf ${tarfile} --wildcards "$original_dirname/share/mysql/charset*" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/share/mysql/english*" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/share/mysql/errmsg*" 
         # Rename it to its abbreviation. 
         # Example: the directory Percona-Server-5.7.18-15-Linux.x86_64.ssl100 will be renamed to ps-5.7.18
         mv ${original_dirname} ${new_dirname}
-        rm ${tarfile}
+        # rm ${tarfile}
     else
         echo "Directory ${new_dirname} already exists. Skipping"
     fi
