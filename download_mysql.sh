@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SCRIPT_PWD=$(cd `dirname $0` && pwd)
+
 mkdir -p ${HOME}/mysql
 cd ${HOME}/mysql 
 
@@ -10,27 +12,27 @@ declare -A files
 
 files=(\
 # Percona server
-    ["ps-5.7-debian"]="$(./get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=ubuntu)" \
-    ["ps-5.6-debian"]="$(./get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=ubuntu)" \
-    ["ps-5.5-debian"]="$(./get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --distribution=ubuntu)" \
-#    ["ps-5.7-centos"]="$(./get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=centos)" \
-#    ["ps-5.6-centos"]="$(./get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=centos)" \
-#    ["ps-5.5-centos"]="$(./get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --distribution=centos)" \
+    ["ps-5.7-debian"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=ubuntu)" \
+    ["ps-5.6-debian"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=ubuntu)" \
+    ["ps-5.5-debian"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --distribution=ubuntu)" \
+#    ["ps-5.7-centos"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=centos)" \
+#    ["ps-5.6-centos"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=centos)" \
+#    ["ps-5.5-centos"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --distribution=centos)" \
 # MySQL server
-    ["my-5.7"]="$(./get_download_link.sh --product=mysql --version=5.7 --arch=x86_64 )" \
-    ["my-5.6"]="$(./get_download_link.sh --product=mysql --version=5.6 --arch=x86_64 )" \
-    ["my-5.5"]="$(./get_download_link.sh --product=mysql --version=5.5 --arch=x86_64 )" \
-    ["my-8.0"]="$(./get_download_link.sh --product=mysql --version=8.0 --arch=x86_64 )" \
+    ["my-5.7"]="$(${SCRIPT_PWD}/get_download_link.sh --product=mysql --version=5.7 --arch=x86_64 )" \
+    ["my-5.6"]="$(${SCRIPT_PWD}/get_download_link.sh --product=mysql --version=5.6 --arch=x86_64 )" \
+    ["my-5.5"]="$(${SCRIPT_PWD}/get_download_link.sh --product=mysql --version=5.5 --arch=x86_64 )" \
+    ["my-8.0"]="$(${SCRIPT_PWD}/get_download_link.sh --product=mysql --version=8.0 --arch=x86_64 )" \
 # MariaDB
-    ["mdb-10.2"]="$(./get_download_link.sh --product=mariadb --version=10.2 --arch=x86_64 )" \
-    ["mdb-10.1"]="$(./get_download_link.sh --product=mariadb --version=10.1 --arch=x86_64 )" \
-    ["mdb-10.0"]="$(./get_download_link.sh --product=mariadb --version=10.0 --arch=x86_64 )" \
+    ["mdb-10.2"]="$(${SCRIPT_PWD}/get_download_link.sh --product=mariadb --version=10.2 --arch=x86_64 )" \
+    ["mdb-10.1"]="$(${SCRIPT_PWD}/get_download_link.sh --product=mariadb --version=10.1 --arch=x86_64 )" \
+    ["mdb-10.0"]="$(${SCRIPT_PWD}/get_download_link.sh --product=mariadb --version=10.0 --arch=x86_64 )" \
 # Percona XtraDB Cluster
-    ["pxc-5.7-debian"]="$(./get_download_link.sh --product=pxc --version=5.7 --arch=x86_64 --distribution=ubuntu)" \
-    ["pxc-5.6-debian"]="$(./get_download_link.sh --product=pxc --version=5.6 --arch=x86_64 --distribution=ubuntu)" \
-#    ["pxc-5.7-centos"]="$(./get_download_link.sh --product=pxc --version=5.7 --arch=x86_64 --distribution=centos)" \
-#    ["pxc-5.6-centos"]="$(./get_download_link.sh --product=pxc --version=5.6 --arch=x86_64 --distribution=centos)" \
-    ["pxc-5.5"]="$(./get_download_link.sh --product=pxc --version=5.5 --arch=x86_64 )" \
+    ["pxc-5.7-debian"]="$(${SCRIPT_PWD}/get_download_link.sh --product=pxc --version=5.7 --arch=x86_64 --distribution=ubuntu)" \
+    ["pxc-5.6-debian"]="$(${SCRIPT_PWD}/get_download_link.sh --product=pxc --version=5.6 --arch=x86_64 --distribution=ubuntu)" \
+#    ["pxc-5.7-centos"]="$(${SCRIPT_PWD}/get_download_link.sh --product=pxc --version=5.7 --arch=x86_64 --distribution=centos)" \
+#    ["pxc-5.6-centos"]="$(${SCRIPT_PWD}/get_download_link.sh --product=pxc --version=5.6 --arch=x86_64 --distribution=centos)" \
+    ["pxc-5.5"]="$(${SCRIPT_PWD}/get_download_link.sh --product=pxc --version=5.5 --arch=x86_64 )" \
 )
 
 for abbrev in ${!files[@]}; do
