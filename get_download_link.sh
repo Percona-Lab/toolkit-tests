@@ -17,7 +17,7 @@ usage(){
   echo -e "  get_download_link.sh -pPRODUCT -vVERSION -aARCH -dDISTRIBUTION -g\n"
   echo -e "Valid options are:"
   echo -e "  --product=PRODUCT, -pPRODUCT   this is the only mandatory parameter"
-  echo -e "                                 can be ps|pxc|pxb|psmdb|pt|pmm-client|mysql|mariadb|mongodb|proxysql"
+  echo -e "                                 can be ps|pxc|pxb|psmdb|pt|pmm-client|mysql|mariadb|mongodb|proxysql|vault"
   echo -e "  --version=x.x, -vx.x           major or full version of the product like 5.7 or 5.7.17-12"
   echo -e "                                 (default: latest major version)"
   echo -e "  --arch=ARCH, -aARCH            build architecture, can be x86_64|i686 (default: x86_64)"
@@ -85,9 +85,10 @@ if [[ -z "$(which wget)" ]]; then
   exit 1
 fi
 
-if [[ -z "${VERSION}" ]] && [[ "${PRODUCT}" = "ps" || "${PRODUCT}" = "pxc" || "${PRODUCT}" = "mysql" ]]; then VERSION="5.7"; fi
-if [[ -z "${VERSION}" ]] && [[ "${PRODUCT}" = "mariadb" ]]; then VERSION="10.2"; fi
-if [[ -z "${VERSION}" && "${PRODUCT}" = "psmdb" ]]; then VERSION="3.4"; fi
+if [[ -z "${VERSION}" ]] && [[ "${PRODUCT}" = "ps" || "${PRODUCT}" = "pxc" ]]; then VERSION="5.7"; fi
+if [[ -z "${VERSION}" && "${PRODUCT}" = "mysql" ]]; then VERSION="8.0"; fi
+if [[ -z "${VERSION}" && "${PRODUCT}" = "mariadb" ]]; then VERSION="10.2"; fi
+if [[ -z "${VERSION}" && "${PRODUCT}" = "psmdb" ]]; then VERSION="3.6"; fi
 if [[ -z "${VERSION}" && "${PRODUCT}" = "mongodb" ]]; then
   VERSION=$(wget -qO- https://www.mongodb.com/download-center\#community | grep -o -P "Current Stable Release \(.{3,10}\)" | grep -o -P "\(.{3,10}\)" | sed 's/(//' | sed 's/)//')
 fi
@@ -164,7 +165,9 @@ get_link(){
     fi
 
   elif [[ "${PRODUCT}" = "psmdb" && "${BUILD_ARCH}" = "x86_64" ]]; then
-    if [[ "${DISTRIBUTION}" = "ubuntu" ]]; then OPT="xenial"; else OPT="centos6"; fi
+    if [[ "${DISTRIBUTION}" = "ubuntu" ]]; then OPT="xenial";
+    elif [[ "${DISTRIBUTION}" = "centos" ]]; then OPT="centos6";
+    else OPT="${DISTRIBUTION}"; fi
     if [[ -z ${VERSION_FULL} ]]; then
       if [[ ${SOURCE} = 0 ]]; then
         LINK=$(wget -qO- https://www.percona.com/downloads/percona-server-mongodb-${VERSION}/LATEST/binary/|grep -oE "percona-server-mongodb-${VERSION}\.[0-9]+-[0-9]+\.[0-9]+-${OPT}-${BUILD_ARCH}\.tar\.gz"|head -n1)
@@ -289,6 +292,7 @@ get_link(){
     fi # version_full
 
   elif [[ "${PRODUCT}" = "proxysql" ]]; then
+    if [[ "${DISTRIBUTION}" = "ubuntu" ]]; then DISTRIBUTION="xenial"; fi
     BASE_LINK="https://www.percona.com/downloads/proxysql/"
     if [[ -z ${VERSION_FULL} ]]; then
         VERSION=$(wget -qO- ${BASE_LINK}|grep -o "proxysql-[0-9]*.[0-9]*.[0-9]*"|head -n1|sed 's/^.*-//')
@@ -327,6 +331,20 @@ get_link(){
       else
         LINK="${BASE_LINK}mongodb-src-r${VERSION_FULL}.tar.gz"
       fi
+    fi
+
+  elif [[ "${PRODUCT}" = "vault" ]]; then
+    BASE_LINK="https://releases.hashicorp.com/vault/"
+    if [ ${BUILD_ARCH} = "x86_64" ]; then
+      BUILD_ARCH="amd64"
+    fi
+
+    if [[ -z ${VERSION_FULL} ]]; then
+      TARBALL=$(wget -qO- https://www.vaultproject.io/downloads.html | grep -oP "vault_.*linux_${BUILD_ARCH}.zip" | head -n1)
+      VERSION_FULL=$(echo "${TARBALL}"|awk -F'_' '{print $2}')
+      LINK="${BASE_LINK}${VERSION_FULL}/${TARBALL}"
+    else
+      LINK="${BASE_LINK}${VERSION_FULL}/vault_${VERSION_FULL}_linux_${BUILD_ARCH}.zip"
     fi
 
   else
