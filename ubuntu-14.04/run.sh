@@ -14,6 +14,8 @@ cd $BASE_DIR
 echo "Deleting all files in /tmp"
 rm -rf /tmp/*
 
+export PATH=$PATH:/mysql/bin
+
 echo "Starting the sandbox ..."
 sandbox/test-env start
 if [ $? -ne 0 ]; then
