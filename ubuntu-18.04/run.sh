@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e 
+
 REPO=${1:-'origin'}
 BRANCH=${2:-'3.0'}
 TEST=${3:-'t/*'}
