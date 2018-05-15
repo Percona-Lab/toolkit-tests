@@ -14,6 +14,8 @@ files=(\
 # Percona server
     ["ps-5.7-debian"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=ubuntu)" \
     ["ps-5.6-debian"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=ubuntu)" \
+    ["ps-5.7-debian-ssl102"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=ubuntu-bionic)" \
+    ["ps-5.6-debian-ssl102"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=ubuntu-bionic)" \
     ["ps-5.5-debian"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.5 --arch=x86_64 --distribution=ubuntu)" \
 #    ["ps-5.7-centos"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.7 --arch=x86_64 --distribution=centos)" \
 #    ["ps-5.6-centos"]="$(${SCRIPT_PWD}/get_download_link.sh --product=ps --version=5.6 --arch=x86_64 --distribution=centos)" \
@@ -57,31 +59,31 @@ for abbrev in ${!files[@]}; do
         #    --ignore-failed-read \
         #    --ignore-command-error \
         #    --wildcards \
-        tar xvzf ${tarfile} --wildcards "$original_dirname/COPYING*" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/README*" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/clustercheck" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/my_print_defaults" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysql" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqladmin" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqlbinlog" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqld" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqld" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqld_safe" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/mysqldump" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/ps-admin" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/resolveip" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/safe_mysqld" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/bin/wsrep*"
-        tar xvzf ${tarfile} --wildcards "$original_dirname/lib/*" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/scripts/mysql_install_db" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/share/*.sql" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/share/*.txt" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/share/charset*" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/share/english*" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/share/errmsg*"  
-        tar xvzf ${tarfile} --wildcards "$original_dirname/share/mysql/charset*" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/share/mysql/english*" 
-        tar xvzf ${tarfile} --wildcards "$original_dirname/share/mysql/errmsg*" 
+        tar xvzf ${tarfile} --wildcards "$original_dirname/COPYING*" \
+        --wildcards "$original_dirname/README*" \
+        --wildcards "$original_dirname/bin/clustercheck" \
+        --wildcards "$original_dirname/bin/my_print_defaults" \
+        --wildcards "$original_dirname/bin/mysql" \
+        --wildcards "$original_dirname/bin/mysqladmin" \
+        --wildcards "$original_dirname/bin/mysqlbinlog" \
+        --wildcards "$original_dirname/bin/mysqld" \
+        --wildcards "$original_dirname/bin/mysqld" \
+        --wildcards "$original_dirname/bin/mysqld_safe" \
+        --wildcards "$original_dirname/bin/mysqldump" \
+        --wildcards "$original_dirname/bin/ps-admin" \
+        --wildcards "$original_dirname/bin/resolveip" \
+        --wildcards "$original_dirname/bin/safe_mysqld" \
+        --wildcards "$original_dirname/bin/wsrep*" \
+        --wildcards "$original_dirname/lib/*" \
+        --wildcards "$original_dirname/scripts/mysql_install_db" \
+        --wildcards "$original_dirname/share/*.sql" \
+        --wildcards "$original_dirname/share/*.txt" \
+        --wildcards "$original_dirname/share/charset*" \
+        --wildcards "$original_dirname/share/english*" \
+        --wildcards "$original_dirname/share/errmsg*" \
+        --wildcards "$original_dirname/share/mysql/charset*" \
+        --wildcards "$original_dirname/share/mysql/english*" \
+        --wildcards "$original_dirname/share/mysql/errmsg*"
         # Rename it to its abbreviation. 
         # Example: the directory Percona-Server-5.7.18-15-Linux.x86_64.ssl100 will be renamed to ps-5.7.18
         mv ${original_dirname} ${new_dirname}
