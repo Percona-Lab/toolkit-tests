@@ -16,7 +16,7 @@ RUN apt update && \
     apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install JSON' && \
-    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'Net::Address::IP::Local' && \
+    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Net::Address::IP::Local' && \
     adduser --disabled-password --gecos '' testuser && \
     tar -C /usr/local -xzf /tmp/go.linux-amd64.tar.gz && \
     go get github.com/Masterminds/glide && \

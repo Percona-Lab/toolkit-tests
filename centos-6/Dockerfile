@@ -24,7 +24,7 @@ RUN yum clean all && \
 # Install Perl dependencies && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install JSON' && \
-    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'Net::Address::IP::Local' && \
+    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Net::Address::IP::Local' && \
 # We don't want to run everything as root && \
     useradd -ms /bin/bash testuser && \
 # Install Go && \
