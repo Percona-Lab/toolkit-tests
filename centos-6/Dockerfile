@@ -56,4 +56,4 @@ WORKDIR /home/testuser
 
 VOLUME [ "/mysql", "/tmp" ]
 
-CMD ["/home/testuser/run.sh"]
+ENTRYPOINT ["/home/testuser/run.sh"]

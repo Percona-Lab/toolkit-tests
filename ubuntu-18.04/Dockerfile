@@ -3,17 +3,23 @@ FROM ubuntu:18.04
 MAINTAINER Carlos Salguero <carlos.salguero@percona.com>
 
 ENV DEBIAN_FRONTEND="noninteractive" \
-    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/testuser/golang/bin/" \
+    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/testuser/golang/bin/:/mysql/bin" \
     GOPATH="/home/testuser/golang" \
     PERCONA_TOOLKIT_SANDBOX="/mysql" \
     PERCONA_TOOLKIT_BRANCH="/home/testuser/golang/src/github.com/percona/percona-toolkit" \
-    PERCONA_SLOW_BOX=1
+    PERCONA_SLOW_BOX=1 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \ 
+    LC_ALL=en_US.UTF-8
 
-
-ADD https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
+ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
 
 RUN apt update && \
-    apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 libjson-perl && \
+    apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 libjson-perl vim locales && \
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen && \
+    /usr/bin/git config --global diff.tool vimdiff && \
+    /usr/bin/git config --global alias.d difftool && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Net::Address::IP::Local' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Text::Diff' && \
@@ -45,4 +51,4 @@ WORKDIR /home/testuser
 
 VOLUME [ "/mysql", "/tmp" ]
 
-CMD ["/home/testuser/run.sh"]
+ENTRYPOINT ["/home/testuser/run.sh"]
