@@ -2,7 +2,7 @@ FROM centos:7
 
 MAINTAINER Carlos Salguero <carlos.salguero@percona.com>
 
-ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/testuser/golang/bin/:/root/perl5/bin" \
+ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/testuser/golang/bin/:/root/perl5/bin:/mysql/bin" \
     GOPATH="/home/testuser/golang" \
     PERCONA_TOOLKIT_SANDBOX="/mysql" \
     PERCONA_TOOLKIT_BRANCH="/home/testuser/golang/src/github.com/percona/percona-toolkit" \
@@ -10,9 +10,12 @@ ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/loca
     PERL_LOCAL_LIB_ROOT="$PERL_LOCAL_LIB_ROOT:/root/perl5" \
     PERL_MB_OPT="--install_base /root/perl5" \
     PERL_MM_OPT="INSTALL_BASE=/root/perl5" \
-    PERL5LIB="/root/perl5/lib/perl5:$PERL5LIB" 
+    PERL5LIB="/root/perl5/lib/perl5:$PERL5LIB" \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \ 
+    LC_ALL=en_US.UTF-8
 
-ADD https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
+ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
 
 RUN yum clean all && \
     yum check && \
@@ -20,7 +23,11 @@ RUN yum clean all && \
     yum upgrade -y && \
     yum install -y deltarpm && \
     yum groupinstall -y 'Development Tools' && \
-    yum install -y git perl-devel perl-core perl-CPAN perl-DBI perl-DBD-MySQL libdbi-dbd-mysql libaio libaio-devel numactl-libs && \
+    yum install -y git perl-devel perl-core perl-CPAN perl-DBI perl-DBD-MySQL libdbi-dbd-mysql libaio libaio-devel numactl-libs vim locales && \
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen && \
+    /usr/bin/git config --global diff.tool vimdiff && \
+    /usr/bin/git config --global alias.d difftool && \
 # Install Perl dependencies && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install JSON' && \
@@ -56,4 +63,4 @@ WORKDIR /home/testuser
 
 VOLUME [ "/mysql", "/tmp" ]
 
-CMD ["/home/testuser/run.sh"]
+ENTRYPOINT ["/home/testuser/run.sh"]

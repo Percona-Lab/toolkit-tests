@@ -113,7 +113,7 @@ docker run --rm -ti -e "FORK=mariadb" -v ${HOME}/mysql/mdb-10.2.7:/mysql toolkit
 ```
   
 7) Using `tmpfs`:
-   In case your `/tmp` directory is mounted on a `tmpfs`, you can set up a directory from your host, to be used by the container.  Example:
+In case your `/tmp` directory is mounted on a `tmpfs`, you can set up a directory from your host, to be used by the container.  Example:
 
 ```
 mkdir /tmp/toolkit-test-tmp
@@ -123,6 +123,12 @@ This will mount the directory `/tmp/toolkit-test-tmp` from the host into `/tmp` 
 Since your local's `/tmp` is mouted on a *tmpfs*, `/tmp` in the cotainer will also be mounted on the *tmpfs* so, all operations on the testing databases will run much faster.  
 
   
+## Debugging
+For debugging purposes, sometimes you need to run a command like `bash` into the container. Since the container is using an `ENTRYPOINT`, the way to run a custom command is:  
+```
+docker run -ti -v ${HOME}/mysql/my-5.7.18:/mysql -v /tmp/toolkit-test-tmp:/tmp --entrypoint /bin/bash toolkit-test
+```
+
 **Notes**  
 1) In these examples I am using the `--rm` because I don't need to keep the container.  
 2) You can redirect the output to a file to capture the logs for further analysis.
