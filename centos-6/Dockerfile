@@ -1,7 +1,5 @@
 FROM centos:6
 
-MAINTAINER Carlos Salguero <carlos.salguero@percona.com>
-
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/testuser/golang/bin/:/root/perl5/bin" \
     GOPATH="/home/testuser/golang" \
     PERCONA_TOOLKIT_SANDBOX="/mysql" \
@@ -13,6 +11,7 @@ ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/loca
     PERL5LIB="/root/perl5/lib/perl5:$PERL5LIB" 
 
 ADD https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
+ADD my.cnf /home/testuser/.my.cnf
 
 RUN yum clean all && \
     yum check && \
@@ -20,7 +19,7 @@ RUN yum clean all && \
     yum upgrade -y && \
     yum install -y deltarpm && \
     yum groupinstall -y 'Development Tools' && \
-    yum install -y git perl-devel perl-core perl-CPAN perl-DBI perl-DBD-MySQL libdbi-dbd-mysql libaio libaio-devel numactl && \
+    yum install -y git perl-devel perl-core perl-CPAN perl-DBI perl-DBD-MySQL libdbi-dbd-mysql libaio libaio-devel numactl locales libjemalloc && \
 # Install Perl dependencies && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install JSON' && \
@@ -33,6 +32,7 @@ RUN yum clean all && \
 # Set owner & permissions sin previous step were run as root && \
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
+    chmod 600 /home/testuser/.my.cnf && \
 # Clone the Toolkit repo && \
 # Clean up && \
     yum clean all && \

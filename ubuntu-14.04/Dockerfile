@@ -1,7 +1,5 @@
 FROM ubuntu:14.04
 
-MAINTAINER Carlos Salguero <carlos.salguero@percona.com>
-
 ENV DEBIAN_FRONTEND="noninteractive" \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/testuser/golang/bin/:/mysql/bin" \
     GOPATH="/home/testuser/golang" \
@@ -13,9 +11,10 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     LC_ALL=en_US.UTF-8
 
 ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
+ADD my.cnf /home/testuser/.my.cnf
 
 RUN apt-get update && \
-    apt-get install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 vim locales && \
+    apt-get install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 vim locales jemalloc1 && \
     locale-gen en_US en_US.UTF-8 && \
     dpkg-reconfigure locales && \
     /usr/bin/git config --global diff.tool vimdiff && \
@@ -32,6 +31,7 @@ RUN apt-get update && \
 # Set owner & permissions sin previous step were run as root
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
+    chmod 600 /home/testuser/.my.cnf && \
 # Clean up
     apt-get autoremove && \
     apt-get autoclean -y && \

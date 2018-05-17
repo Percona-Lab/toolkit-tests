@@ -1,7 +1,5 @@
 FROM ubuntu:18.04
 
-MAINTAINER Carlos Salguero <carlos.salguero@percona.com>
-
 ENV DEBIAN_FRONTEND="noninteractive" \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/home/testuser/golang/bin/:/mysql/bin" \
     GOPATH="/home/testuser/golang" \
@@ -13,9 +11,10 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     LC_ALL=en_US.UTF-8
 
 ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
+ADD my.cnf /home/testuser/.my.cnf
 
 RUN apt update && \
-    apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 libjson-perl vim locales && \
+    apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 libjson-perl vim locales libjemalloc1 && \
     sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     locale-gen && \
     /usr/bin/git config --global diff.tool vimdiff && \
@@ -29,6 +28,7 @@ RUN apt update && \
     go install github.com/Masterminds/glide && \
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
+    chmod 600 /home/testuser/.my.cnf && \
 # Clean up
     apt autoremove && \
     apt autoclean -y && \
