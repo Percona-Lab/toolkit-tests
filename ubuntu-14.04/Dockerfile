@@ -14,9 +14,9 @@ ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.li
 ADD my.cnf /home/testuser/.my.cnf
 
 RUN apt-get update && \
-    apt-get install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 vim locales libjemalloc1 && \
-    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen && \
+    apt-get install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 vim locales jemalloc1 && \
+    locale-gen en_US en_US.UTF-8 && \
+    dpkg-reconfigure locales && \
     /usr/bin/git config --global diff.tool vimdiff && \
     /usr/bin/git config --global alias.d difftool && \
 # Install Perl dependencies
