@@ -14,7 +14,6 @@ ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/loca
     LC_ALL=en_US.UTF-8
 
 ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
-ADD my.cnf /home/testuser/.my.cnf
 
 RUN yum clean all && \
     yum check && \
@@ -39,7 +38,6 @@ RUN yum clean all && \
 # Set owner & permissions sin previous step were run as root && \
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
-    chmod 600 /home/testuser/.my.cnf && \
 # Clone the Toolkit repo && \
 # Clean up && \
     yum clean all && \
@@ -50,13 +48,16 @@ RUN yum clean all && \
 
 USER testuser
 ADD run.sh /home/testuser/run.sh
+ADD my.cnf /home/testuser/.my.cnf
+
 RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
 # Install Go dependencies manager (glide) & clone Percona Toolkit repo && \
     go get github.com/Masterminds/glide && \
     go install github.com/Masterminds/glide 
 
 USER root
-RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/
+RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/ && \
+    chmod 600 /home/testuser/.my.cnf
 USER testuser
 
 WORKDIR /home/testuser

@@ -11,7 +11,6 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     LC_ALL=en_US.UTF-8
 
 ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
-ADD my.cnf /home/testuser/.my.cnf
 
 RUN apt-get update && \
     apt-get install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 libreadline6 vim locales libjemalloc1 && \
@@ -31,7 +30,6 @@ RUN apt-get update && \
 # Set owner & permissions sin previous step were run as root
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
-    chmod 600 /home/testuser/.my.cnf && \
 # Clean up
     apt-get autoremove && \
     apt-get autoclean -y && \
@@ -42,6 +40,8 @@ RUN apt-get update && \
 
 USER testuser
 ADD run.sh /home/testuser/run.sh
+ADD my.cnf /home/testuser/.my.cnf
+
 # Clone the Toolkit repo
 RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
 # Install Go dependencies manager (glide) & clone Percona Toolkit repo
@@ -49,7 +49,8 @@ RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/gola
     go install github.com/Masterminds/glide 
 
 USER root
-RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/
+RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/ && \
+    chmod 600 /home/testuser/.my.cnf
 USER testuser
 
 WORKDIR /home/testuser
