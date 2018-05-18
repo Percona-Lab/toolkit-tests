@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
 
 RUN apt-get update && \
-    apt-get install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 vim locales jemalloc1 && \
+    apt-get install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 vim locales libjemalloc1 && \
     locale-gen en_US en_US.UTF-8 && \
     dpkg-reconfigure locales && \
     /usr/bin/git config --global diff.tool vimdiff && \
