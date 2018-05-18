@@ -98,12 +98,12 @@ docker run --rm -ti -v ${HOME}/mysql/ps-5.7.18:/mysql toolkit-test https://githu
 
 4) Running only tests in the **t/pt-online-schema-change/** directory, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
 ```
-docker run --rm -ti ${HOME}/mysql/my-5.7.18:/mysql toolkit-test origin PT-91-MySQL-5.7 t/pt-online-schema-change/*
+docker run --rm -ti -v ${HOME}/mysql/my-5.7.18:/mysql toolkit-test origin PT-91-MySQL-5.7 t/pt-online-schema-change/*
 ```
 
 5) Running only the tests in `t/pt-online-schema-change/preserve-triggers.t`, for the **PT-91-MySQL-5.7** branch, using **MySQL 5.7.18**:  
 ```
-docker run --rm -ti ${HOME}/mysql/my-5.7.18:/mysql toolkit-test origin PT-91-MySQL-5.7 t/pt-online-schema-change/preserve-triggers.t
+docker run --rm -ti -v ${HOME}/mysql/my-5.7.18:/mysql toolkit-test origin PT-91-MySQL-5.7 t/pt-online-schema-change/preserve-triggers.t
 ```
 
 6) Running tests for **MariaDB**:
