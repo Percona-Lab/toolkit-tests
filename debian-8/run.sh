@@ -37,6 +37,9 @@ fi
 set -e
 
 NEW_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+git config --global user.name "Percona Docker tests"
+git config --global user.email johndoe@example.com
+
 git pull origin 3.0
 git checkout -b ${NEW_UUID}
 git pull $REPO $BRANCH
