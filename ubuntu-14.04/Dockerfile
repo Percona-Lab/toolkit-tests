@@ -14,7 +14,7 @@ ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.li
 
 RUN apt update && \
     apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 libjson-perl vim locales libjemalloc1 && \
-    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANGUAGE="en_US.UTF-8"' >> /etc/default/locale && \
     locale-gen && \
     /usr/bin/git config --global diff.tool vimdiff && \
     /usr/bin/git config --global alias.d difftool && \
@@ -31,8 +31,8 @@ RUN apt update && \
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
 # Clean up
-    apt autoremove && \
-    apt autoclean -y && \
+#    apt autoremove && \
+#    apt autoclean -y && \
     rm -rf /tmp/* && \
 # In this directory we will mount the directory having the MySQL binaries
     mkdir -p /mysql && \
