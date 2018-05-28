@@ -21,6 +21,9 @@ RUN apt update && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Net::Address::IP::Local' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Text::Diff' && \
+    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'force install DBI' && \
+    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'force install DBD::mysql' && \
+    PERL_MM_USE_DEFAULT=1 cpan -T -f JSON && \
     adduser --disabled-password --gecos '' testuser && \
     tar -C /usr/local -xzf /tmp/go.linux-amd64.tar.gz && \
     go get github.com/Masterminds/glide && \
@@ -36,8 +39,9 @@ RUN apt update && \
     chmod -R 777 /tmp 
 
 USER testuser
-ADD run.sh /home/testuser/run.sh
-ADD my.cnf /home/testuser/.my.cnf
+ADD --chown=testuser run.sh /home/testuser/run.sh
+ADD --chown=testuser my.cnf /home/testuser/.my.cnf
+ADD --chown=testuser bashrc /home/testuser/.bashrc
 
 # Install Go dependencies manager (glide) & clone Percona Toolkit repo && 
 RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
@@ -47,7 +51,8 @@ RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/gola
 USER root
 
 RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/ && \
-    chmod 600 /home/testuser/.my.cnf
+    chmod 600 /home/testuser/.my.cnf && \
+    chmod 777 /home/testuser/.bashrc
 
 USER testuser
 

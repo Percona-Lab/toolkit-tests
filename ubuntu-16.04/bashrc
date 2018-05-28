@@ -1,0 +1,8 @@
+echo "Type:"
+echo '     cd /home/testuser/golang/src/github.com/percona/percona-toolkit/'
+echo '     sandbox/testenv restart'
+echo "to start the sandbox or run: . ./run.sh --no-test"
+echo "to change the current directory and start the sandbox without running the tests."
+echo
+echo
+

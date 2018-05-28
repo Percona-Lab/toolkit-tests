@@ -19,7 +19,10 @@ rm -rf /tmp/*
 export PATH=$PATH:/mysql/bin
 
 echo "Starting the sandbox ..."
-sandbox/test-env start
+# Do a restart instead of a start to ensure we are deleting any lefover
+# from a previous test in the mounted dir (if any)
+
+sandbox/test-env restart
 if [ $? -ne 0 ]; then
     echo 'Error: cannot start the sandbox'
     echo 'Plase check the directory containing the MySQL distribution you want to use'
@@ -42,8 +45,18 @@ git config --global user.email johndoe@example.com
 
 git pull origin 3.0
 git checkout -b ${NEW_UUID}
+
+# This is for debugging purposes.
+# If the container was started with --entrypoint /bin/bash, running this script with
+# --no-test, will start the sandbox and do the pull from the repo.
+
+if [ "$1" = "--no-test" ]; then
+    exit 0
+fi
+
 git pull $REPO $BRANCH
 
-prove -v -w $TEST
+# -v: verbose, -w: show warnings, -m: join stdout & stderr
+prove -vwm $TEST
 
 sandbox/test-env stop                   

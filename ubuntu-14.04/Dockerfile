@@ -12,45 +12,48 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 
 ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
 
-RUN apt-get update && \
-    apt-get install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 vim locales libjemalloc1 && \
-    locale-gen en_US en_US.UTF-8 && \
-    dpkg-reconfigure locales && \
+RUN apt update && \
+    apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 libjson-perl vim locales libjemalloc1 && \
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen && \
     /usr/bin/git config --global diff.tool vimdiff && \
     /usr/bin/git config --global alias.d difftool && \
-# Install Perl dependencies
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
-    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install JSON' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Net::Address::IP::Local' && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Text::Diff' && \
-# We don't want to run everything as root
+    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'force install DBI' && \
+    PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'force install DBD::mysql' && \
+    PERL_MM_USE_DEFAULT=1 cpan -T -f JSON && \
     adduser --disabled-password --gecos '' testuser && \
-# Install Go
     tar -C /usr/local -xzf /tmp/go.linux-amd64.tar.gz && \
-# Set owner & permissions sin previous step were run as root
+    go get github.com/Masterminds/glide && \
+    go install github.com/Masterminds/glide && \
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
 # Clean up
-    apt-get autoremove && \
-    apt-get autoclean -y && \
+    apt autoremove && \
+    apt autoclean -y && \
     rm -rf /tmp/* && \
 # In this directory we will mount the directory having the MySQL binaries
     mkdir -p /mysql && \
-    chmod -R 777 /tmp
+    chmod -R 777 /tmp 
 
 USER testuser
-ADD run.sh /home/testuser/run.sh
-ADD my.cnf /home/testuser/.my.cnf
+ADD --chown=testuser run.sh /home/testuser/run.sh
+ADD --chown=testuser my.cnf /home/testuser/.my.cnf
+ADD --chown=testuser bashrc /home/testuser/.bashrc
 
-# Clone the Toolkit repo
+# Install Go dependencies manager (glide) & clone Percona Toolkit repo && 
 RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
-# Install Go dependencies manager (glide) & clone Percona Toolkit repo
     go get github.com/Masterminds/glide && \
     go install github.com/Masterminds/glide 
 
 USER root
+
 RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/ && \
-    chmod 600 /home/testuser/.my.cnf
+    chmod 600 /home/testuser/.my.cnf && \
+    chmod 777 /home/testuser/.bashrc
+
 USER testuser
 
 WORKDIR /home/testuser
