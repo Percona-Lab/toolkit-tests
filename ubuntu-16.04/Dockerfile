@@ -39,12 +39,15 @@ RUN apt update && \
     chmod -R 777 /tmp
 
 USER testuser
-ADD --chown=testuser run.sh /home/testuser/run.sh
-ADD --chown=testuser my.cnf /home/testuser/.my.cnf
-ADD --chown=testuser bashrc /home/testuser/.bashrc
+ADD run.sh /home/testuser/run.sh
+ADD my.cnf /home/testuser/.my.cnf
+ADD bashrc /home/testuser/.bashrc
 
 # Install Go dependencies manager (glide) & clone Percona Toolkit repo && 
 RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
+    chown testuser /home/testuser/run.sh && \
+    chown testuser /home/testuser/.my.cnf && \
+    chown testuser /home/testuser/.bashrc && \
     go get github.com/Masterminds/glide && \
     go install github.com/Masterminds/glide 
 

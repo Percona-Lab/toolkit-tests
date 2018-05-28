@@ -39,9 +39,9 @@ RUN apt update && \
     chmod -R 777 /tmp 
 
 USER testuser
-ADD --chown=testuser run.sh /home/testuser/run.sh
-ADD --chown=testuser my.cnf /home/testuser/.my.cnf
-ADD --chown=testuser bashrc /home/testuser/.bashrc
+ADD run.sh /home/testuser/run.sh
+ADD my.cnf /home/testuser/.my.cnf
+ADD bashrc /home/testuser/.bashrc
 
 # Install Go dependencies manager (glide) & clone Percona Toolkit repo && 
 RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
@@ -51,6 +51,9 @@ RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/gola
 USER root
 
 RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/ && \
+    chown testuser /home/testuser/run.sh && \
+    chown testuser /home/testuser/.my.cnf && \
+    chown testuser /home/testuser/.bashrc && \
     chmod 600 /home/testuser/.my.cnf && \
     chmod 777 /home/testuser/.bashrc
 
