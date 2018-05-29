@@ -44,17 +44,14 @@ ADD my.cnf /home/testuser/.my.cnf
 ADD bashrc /home/testuser/.bashrc
 
 # Install Go dependencies manager (glide) & clone Percona Toolkit repo && 
+USER root
 RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
     go get github.com/Masterminds/glide && \
     go install github.com/Masterminds/glide 
 
-USER root
-
 RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/ && \
-    chown testuser /home/testuser/run.sh && \
-    chown testuser /home/testuser/.my.cnf && \
-    chown testuser /home/testuser/.bashrc && \
     chmod 600 /home/testuser/.my.cnf && \
+    chown -R testuser /home/testuser && \
     chmod 777 /home/testuser/.bashrc
 
 USER testuser
