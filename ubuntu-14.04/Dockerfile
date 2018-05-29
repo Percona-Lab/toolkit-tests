@@ -15,7 +15,7 @@ ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.li
 RUN apt update && \
     apt install -y git libdbi-perl libdbd-mysql-perl libdbd-mysql libaio1 libaio-dev build-essential libnuma1 libjson-perl vim locales libjemalloc1 && \
     echo 'LANGUAGE="en_US.UTF-8"' >> /etc/default/locale && \
-    locale-gen && \
+    locale-gen en_US.UTF-8 && \
     /usr/bin/git config --global diff.tool vimdiff && \
     /usr/bin/git config --global alias.d difftool && \
     PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install File::Slurp' && \
