@@ -64,8 +64,8 @@ pipeline {
                     """
                 }
                 sh """
-                    for distro in ${REQ_DISTRO}; do
-                        sudo docker push perconalab/toolkit-tests:toolkit-test-${distro}
+                    for distro in "${REQ_DISTRO}"; do
+                        sudo docker push perconalab/toolkit-tests:toolkit-test-"${distro}"
                     done
                     """
                 //sh """
