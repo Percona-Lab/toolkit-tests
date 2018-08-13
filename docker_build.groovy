@@ -1,7 +1,7 @@
-library changelog: false, identifier: 'lib@master', retriever: modernSCM([
-    $class: 'GitSCMSource',
-    remote: 'https://github.com/Percona-Lab/toolkit-tests.git'
-]) _
+//library changelog: false, identifier: 'lib@master', retriever: modernSCM([
+//    $class: 'GitSCMSource',
+//    remote: 'https://github.com/Percona-Lab/toolkit-tests.git'
+//]) _
 
 pipeline {
     environment {
