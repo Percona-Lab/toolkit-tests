@@ -61,11 +61,13 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'hub.docker.com', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                     sh """
                         sudo docker login -u "${USER}" -p "${PASS}"
-                        for distro in ${REQ_DISTRO}; do
-                            sudo docker push perconalab/toolkit-tests:toolkit-test-${distro}
-                        done
                     """
                 }
+                sh """
+                    for distro in ${REQ_DISTRO}; do
+                        sudo docker push perconalab/toolkit-tests:toolkit-test-${distro}
+                    done
+                    """
                 //sh """
                 //    sudo docker rm -f \$(sudo docker ps -aq) || true
                 //    sudo docker rmi -f \$(sudo docker images -q) || true
