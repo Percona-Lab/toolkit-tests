@@ -60,8 +60,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'hub.docker.com', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                     sh """
+                        sudo docker login -u "${USER}" -p "${PASS}"
                         for distro in ${REQ_DISTRO}; do
-                            sudo docker login -u "${USER}" -p "${PASS}"
                             sudo docker push perconalab/toolkit-tests:toolkit-test-${distro}
                         done
                     """
