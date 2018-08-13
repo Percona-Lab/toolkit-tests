@@ -63,11 +63,11 @@ pipeline {
                         sudo docker login -u "${USER}" -p "${PASS}"
                     """
                 }
-                sh """
-                    for distro in "${REQ_DISTRO}"; do
-                        sudo docker push perconalab/toolkit-tests:toolkit-test-"${distro}"
+                sh '''
+                    for distro in ${REQ_DISTRO}; do
+                        sudo docker push perconalab/toolkit-tests:toolkit-test-${distro}
                     done
-                    """
+                '''
                 //sh """
                 //    sudo docker rm -f \$(sudo docker ps -aq) || true
                 //    sudo docker rmi -f \$(sudo docker images -q) || true
