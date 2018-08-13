@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh '''
                   for distro in ${REQ_DISTRO}; do
-                      docker rmi perconalab/toolkit-tests:toolkit-test-${distro} --force || true
+                      sudo docker rmi perconalab/toolkit-tests:toolkit-test-${distro} --force || true
                   done
                   rm -rf ${GIT_REPO}
                   git clone ${GIT_REPO} --branch ${GIT_BRANCH} --depth 1
@@ -48,7 +48,7 @@ pipeline {
                   pushd toolkit-tests
                   for distro in ${REQ_DISTRO}; do
                       pushd ${distro}
-                      docker build --tag=perconalab/toolkit-tests:toolkit-test-${distro} .
+                      sudo docker build --tag=perconalab/toolkit-tests:toolkit-test-${distro} .
                       popd
                   done
                   popd
