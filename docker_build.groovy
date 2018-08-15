@@ -8,7 +8,7 @@ pipeline {
         specName = 'Docker'
     }
     agent {
-        label 'docker-01'
+        label 'docker'
     }
     parameters {
         string(
