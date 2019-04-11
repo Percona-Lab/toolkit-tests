@@ -28,8 +28,6 @@ RUN apt update && \
 # Set owner & permissions sin previous step were run as root
     chown -R testuser /home/testuser && \
     chmod -R 777 /home/testuser && \
-# Clone the Toolkit repo
-    git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
 # Clean up
     apt autoremove && \
     apt autoclean -y && \
