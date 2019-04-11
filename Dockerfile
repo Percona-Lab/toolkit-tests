@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     PERCONA_TOOLKIT_SANDBOX="/tmp/mysql" \
     PERCONA_TOOLKIT_BRANCH="/home/testuser/golang/src/github.com/percona/percona-toolkit" \
     PERCONA_SLOW_BOX=1 \
-    PERL5LIB="${GOPATH}/src/github.com/percona/percona-toolkit/lib"
+    PERL5LIB="${GOPATH}/src/github.com/percona/percona-toolkit/lib" \
 
 
 ADD https://storage.googleapis.com/golang/go1.9beta2.linux-amd64.tar.gz /tmp/go1.9beta2.linux-amd64.tar.gz
@@ -33,7 +33,7 @@ RUN apt update && \
     git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
 
 # Check if env is setup
-   cd /home/testuser/golang/src/github.com/percona/percona-toolkit && perl util/check-dev-env
+    cd /home/testuser/golang/src/github.com/percona/percona-toolkit && perl util/check-dev-env && \
 # Clean up
     apt autoremove && \
     apt autoclean -y && \
