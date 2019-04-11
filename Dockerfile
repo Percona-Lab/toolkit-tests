@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     PERCONA_SLOW_BOX=1 \
     PERL5LIB="${GOPATH}/src/github.com/percona/percona-toolkit/lib" \
 
-
+RUN ls -la
 ADD https://storage.googleapis.com/golang/go1.9beta2.linux-amd64.tar.gz /tmp/go1.9beta2.linux-amd64.tar.gz
 
 RUN apt update && \
