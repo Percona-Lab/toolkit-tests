@@ -80,11 +80,5 @@ pipeline {
         always {
             deleteDir()
         }
-        success {
-            slackSend channel: '@tomislav', color: '#00FF00', message: "[${specName}]: build finished"
-        }
-        failure {
-            slackSend channel: '@tomislav', color: '#FF0000', message: "[${specName}]: build failed"
-        }
     }
 }

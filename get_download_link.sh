@@ -3,8 +3,6 @@
 
 PRODUCT=""
 VERSION=""
-BUILD_ARCH="x86_64"
-DISTRIBUTION="ubuntu"
 DIST_REL=""
 LINK=""
 DOWNLOAD=0
@@ -18,7 +16,7 @@ usage(){
   echo -e "  get_download_link.sh -pPRODUCT -vVERSION -aARCH -dDISTRIBUTION -g\n"
   echo -e "Valid options are:"
   echo -e "  --product=PRODUCT, -pPRODUCT   this is the only mandatory parameter"
-  echo -e "                                 can be ps|pxc|pxb|psmdb|pt|pmm-client|mysql|mariadb|mongodb|proxysql|vault"
+  echo -e "                                 can be ps|pxc|pxb|psmdb|pt|pmm-client|mysql|mariadb|mongodb|proxysql|vault|postgresql"
   echo -e "  --version=x.x, -vx.x           major or full version of the product like 5.7 or 5.7.17-12"
   echo -e "                                 (default: latest major version)"
   echo -e "  --arch=ARCH, -aARCH            build architecture, can be x86_64|i686 (default: x86_64)"
@@ -82,6 +80,14 @@ if [[ -z ${PRODUCT} ]]; then
   exit 1
 fi
 
+if [[ -z ${BUILD_ARCH} ]]; then
+  BUILD_ARCH="x86_64"
+fi
+
+if [[ -z ${DISTRIBUTION} ]]; then
+  DISTRIBUTION="ubuntu"
+fi
+
 if [[ -z "$(which wget)" ]]; then
   echo "ERROR: wget is required for proper functioning of this script!"
   exit 1
@@ -89,10 +95,12 @@ fi
 
 if [[ -z "${VERSION}" ]] && [[ "${PRODUCT}" = "ps" || "${PRODUCT}" = "pxc" ]]; then VERSION="5.7"; fi
 if [[ -z "${VERSION}" && "${PRODUCT}" = "mysql" ]]; then VERSION="8.0"; fi
-if [[ -z "${VERSION}" && "${PRODUCT}" = "mariadb" ]]; then VERSION="10.2"; fi
-if [[ -z "${VERSION}" && "${PRODUCT}" = "psmdb" ]]; then VERSION="3.6"; fi
-if [[ -z "${VERSION}" && "${PRODUCT}" = "mongodb" ]]; then
-  VERSION=$(wget -qO- https://www.mongodb.com/download-center\#community | grep -o -P "Current Stable Release \(.{3,10}\)" | grep -o -P "\(.{3,10}\)" | sed 's/(//' | sed 's/)//')
+if [[ -z "${VERSION}" && "${PRODUCT}" = "pxb" ]]; then VERSION="8.0"; fi
+if [[ -z "${VERSION}" && "${PRODUCT}" = "mariadb" ]]; then VERSION="10.3"; fi
+if [[ -z "${VERSION}" && "${PRODUCT}" = "psmdb" ]]; then VERSION="4.0"; fi
+if [[ -z "${VERSION}" && "${PRODUCT}" = "mongodb" ]]; then VERSION="4.0"; fi
+if [[ -z "${VERSION}" && "${PRODUCT}" = "postgresql" ]]; then
+  VERSION=$(wget -qO- https://www.enterprisedb.com/download-postgresql-binaries|grep -oP "postgresql-.*-x64-.*.tar.gz"|head -n1|grep -oP "[0-9]+\.[0-9]+(\.[0-9]+)?")
 fi
 
 if [[ "${DISTRIBUTION}" = *"-"* ]]; then
@@ -180,10 +188,10 @@ get_link(){
     else OPT="${DISTRIBUTION}"; fi
     if [[ -z ${VERSION_FULL} ]]; then
       if [[ ${SOURCE} = 0 ]]; then
-        LINK=$(wget -qO- https://www.percona.com/downloads/percona-server-mongodb-${VERSION}/LATEST/binary/|grep -oE "percona-server-mongodb-${VERSION}\.[0-9]+-[0-9]+\.[0-9]+-${OPT}-${BUILD_ARCH}\.tar\.gz"|head -n1)
+        LINK=$(wget -qO- https://www.percona.com/downloads/percona-server-mongodb-${VERSION}/LATEST/binary/|grep -oE "percona-server-mongodb-${VERSION}\.[0-9]+-[0-9]+(\.[0-9]+)?-${OPT}-${BUILD_ARCH}\.tar\.gz"|head -n1)
         if [[ ! -z ${LINK} ]]; then LINK="https://www.percona.com/downloads/percona-server-mongodb-${VERSION}/LATEST/binary/tarball/${LINK}"; fi
       else
-        LINK=$(wget -qO- https://www.percona.com/downloads/percona-server-mongodb-${VERSION}/LATEST/source/|grep -oE "percona-server-mongodb-${VERSION}\.[0-9]+-[0-9]+\.[0-9]+\.tar\.gz"|head -n1)
+        LINK=$(wget -qO- https://www.percona.com/downloads/percona-server-mongodb-${VERSION}/LATEST/source/|grep -oE "percona-server-mongodb-${VERSION}\.[0-9]+-[0-9]+(\.[0-9]+)?\.tar\.gz"|head -n1)
         if [[ ! -z ${LINK} ]]; then LINK="https://www.percona.com/downloads/percona-server-mongodb-${VERSION}/LATEST/source/tarball/${LINK}"; fi
       fi
     else
@@ -197,19 +205,26 @@ get_link(){
     fi
 
   elif [[ "${PRODUCT}" = "pxb" ]]; then
+    if [[ "${DISTRIBUTION}" = "ubuntu" || "${DISTRIBUTION}" = "debian" ]]; then
+      OPT="libgcrypt20"
+    else
+      OPT="libgcrypt145"
+    fi
     if [[ -z ${VERSION_FULL} ]]; then
       if [[ ${SOURCE} = 0 ]]; then
-        LINK=$(wget -qO- https://www.percona.com/downloads/XtraBackup/LATEST/binary/|grep -oE "percona-xtrabackup-[0-9]+\.[0-9]+\.[0-9]+-Linux-${BUILD_ARCH}\.tar\.gz"|head -n1)
-        if [[ ! -z ${LINK} ]]; then LINK="https://www.percona.com/downloads/XtraBackup/LATEST/binary/tarball/${LINK}"; fi
+        #LINK=$(wget -qO- https://www.percona.com/downloads/XtraBackup/LATEST/binary/|grep -oE "percona-xtrabackup-[0-9]+\.[0-9]+\.[0-9]+-Linux-${BUILD_ARCH}\.tar\.gz"|head -n1)
+        VERSION_FULL=$(wget -qO- https://www.percona.com/downloads/Percona-XtraBackup-${VERSION}/LATEST/binary/|grep -oiE "Percona-XtraBackup-[0-9]+\.[0-9]+\.[0-9]+"|head -n1|grep -oE "[0-9]+\.[0-9]+\.[0-9]+$")
+        TARBALL="percona-xtrabackup-${VERSION_FULL}-Linux-${BUILD_ARCH}.${OPT}.tar.gz"
+        if [[ ! -z ${TARBALL} ]]; then LINK="https://www.percona.com/downloads/Percona-XtraBackup-${VERSION}/Percona-XtraBackup-${VERSION_FULL}/binary/tarball/${TARBALL}"; fi
       else
-        LINK=$(wget -qO- https://www.percona.com/downloads/XtraBackup/LATEST/source/|grep -oE "percona-xtrabackup-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz"|head -n1)
-        if [[ ! -z ${LINK} ]]; then LINK="https://www.percona.com/downloads/XtraBackup/LATEST/source/tarball/${LINK}"; fi
+        LINK=$(wget -qO- https://www.percona.com/downloads/Percona-XtraBackup-${VERSION}/LATEST/source/|grep -oE "percona-xtrabackup-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz"|head -n1)
+        if [[ ! -z ${LINK} ]]; then LINK="https://www.percona.com/downloads/Percona-XtraBackup-${VERSION}/LATEST/source/tarball/${LINK}"; fi
       fi
     else
       if [[ ${SOURCE} = 0 ]]; then
-        LINK="https://www.percona.com/downloads/XtraBackup/Percona-XtraBackup-${VERSION_FULL}/binary/tarball/percona-xtrabackup-${VERSION_FULL}-Linux-${BUILD_ARCH}.tar.gz"
+        LINK="https://www.percona.com/downloads/Percona-XtraBackup-${VERSION}/Percona-XtraBackup-${VERSION_FULL}/binary/tarball/percona-xtrabackup-${VERSION_FULL}-Linux-${BUILD_ARCH}.${OPT}.tar.gz"
       else
-        LINK="https://www.percona.com/downloads/XtraBackup/Percona-XtraBackup-${VERSION_FULL}/source/tarball/percona-xtrabackup-${VERSION_FULL}.tar.gz"
+        LINK="https://www.percona.com/downloads/Percona-XtraBackup-${VERSION}/Percona-XtraBackup-${VERSION_FULL}/source/tarball/percona-xtrabackup-${VERSION_FULL}.tar.gz"
       fi
     fi
 
@@ -251,11 +266,11 @@ get_link(){
     if [[ -z ${VERSION_FULL} ]]; then
       if [[ ${SOURCE} = 0 ]]; then
         BASE_LINK="https://dev.mysql.com/get/Downloads/MySQL-${VERSION}/"
-        TARBALL=$(wget -qO- https://dev.mysql.com/downloads/mysql/${VERSION}.html\?os\=2|grep -o -P "(mysql|MySQL)-[0-9]+\.[0-9]+\.[0-9]+.*${BUILD_ARCH}.tar.gz"|grep -v "mysql-test"|head -n1)
+        TARBALL=$(wget -qO- https://dev.mysql.com/downloads/mysql/${VERSION}.html\?os\=2|grep -o -P "(mysql|MySQL)-[0-9]+\.[0-9]+\.[0-9]+.*${BUILD_ARCH}\.tar\..."|grep -v "mysql-test"|head -n1)
         LINK="${BASE_LINK}${TARBALL}"
       else
         BASE_LINK="https://dev.mysql.com/get/Downloads/MySQL-${VERSION}/"
-        TARBALL=$(wget -qO- https://dev.mysql.com/downloads/mysql/${VERSION}.html\?os\=src|grep -o -P "(mysql|MySQL)-[0-9]+\.[0-9]+\.[0-9]+.tar.gz"|head -n1)
+        TARBALL=$(wget -qO- https://dev.mysql.com/downloads/mysql/${VERSION}.html\?os\=src|grep -o -P "(mysql|MySQL)-[0-9]+\.[0-9]+\.[0-9]+\.tar\..."|head -n1)
         LINK="${BASE_LINK}${TARBALL}"
       fi
     else
@@ -305,7 +320,7 @@ get_link(){
     if [[ "${DISTRIBUTION}" = "ubuntu" ]]; then DISTRIBUTION="xenial"; fi
     BASE_LINK="https://www.percona.com/downloads/proxysql/"
     if [[ -z ${VERSION_FULL} ]]; then
-        VERSION=$(wget -qO- ${BASE_LINK}|grep -o "proxysql-[0-9]*.[0-9]*.[0-9]*"|head -n1|sed 's/^.*-//')
+        VERSION=$(wget -qO- ${BASE_LINK}|grep -o "proxysql-[0-9]*.[0-9]*.[0-9]*"|tail -n1|sed 's/^.*-//')
       if [[ ${SOURCE} = 0 ]]; then
         TARBALL="proxysql-${VERSION}-Linux-${DISTRIBUTION}-${BUILD_ARCH}.tar.gz"
         LINK="${BASE_LINK}proxysql-${VERSION}/binary/tarball/${TARBALL}"
@@ -350,11 +365,26 @@ get_link(){
     fi
 
     if [[ -z ${VERSION_FULL} ]]; then
-      TARBALL=$(wget -qO- https://www.vaultproject.io/downloads.html | grep -oP "vault_.*linux_${BUILD_ARCH}.zip" | head -n1)
-      VERSION_FULL=$(echo "${TARBALL}"|awk -F'_' '{print $2}')
+      VERSION_FULL=$(wget -qO- https://releases.hashicorp.com/vault/ |grep -o "vault_.*"|grep -vP "beta|rc"|sed "s:</a>::"|sed "s:vault_::"|head -n1)
+      TARBALL="vault_${VERSION_FULL}_linux_${BUILD_ARCH}.zip"
       LINK="${BASE_LINK}${VERSION_FULL}/${TARBALL}"
     else
       LINK="${BASE_LINK}${VERSION_FULL}/vault_${VERSION_FULL}_linux_${BUILD_ARCH}.zip"
+    fi
+
+  elif [[ "${PRODUCT}" = "postgresql" ]]; then
+    BASE_LINK="https://get.enterprisedb.com/postgresql/"
+    if [ ${BUILD_ARCH} = "x86_64" ]; then
+      BUILD_ARCH="-x64"
+    else
+      BUILD_ARCH=""
+    fi
+
+    if [[ -z ${VERSION_FULL} ]]; then
+      TARBALL=$(wget -qO- https://www.enterprisedb.com/download-postgresql-binaries|grep -oP "postgresql-${VERSION}.*${BUILD_ARCH}-.*.tar.gz")
+      LINK="${BASE_LINK}${TARBALL}"
+    else
+      LINK="${BASE_LINK}postgresql-${VERSION_FULL}-1-linux${BUILD_ARCH}-binaries.tar.gz"
     fi
 
   else
