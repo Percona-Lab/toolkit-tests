@@ -8,7 +8,8 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     PERCONA_SLOW_BOX=1 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \ 
-    LC_ALL=en_US.UTF-8
+    LC_ALL=en_US.UTF-8 \
+    PERL5LIB="/home/testuser/golang/src/github.com/percona/percona-toolkit/lib"
 
 ADD https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz /tmp/go.linux-amd64.tar.gz
 
@@ -49,6 +50,7 @@ RUN git clone https://github.com/percona/percona-toolkit.git /home/testuser/gola
     go get github.com/Masterminds/glide && \
     go install github.com/Masterminds/glide 
 
+RUN cd /home/testuser/golang/src/github.com/percona/percona-toolkit && perl util/check-dev-env
 RUN /bin/ln -s /home/testuser/golang/src/github.com/percona/percona-toolkit/util/mysql_random_data_load /usr/local/bin/ && \
     chmod 600 /home/testuser/.my.cnf && \
     chown -R testuser /home/testuser && \

@@ -9,7 +9,6 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     PERCONA_TOOLKIT_BRANCH="/home/testuser/golang/src/github.com/percona/percona-toolkit" \
     PERCONA_SLOW_BOX=1
 
-
 ADD https://storage.googleapis.com/golang/go1.9beta2.linux-amd64.tar.gz /tmp/go1.9beta2.linux-amd64.tar.gz
 
 RUN apt update && \
@@ -30,6 +29,7 @@ RUN apt update && \
     chmod -R 777 /home/testuser && \
 # Clone the Toolkit repo
     git clone https://github.com/percona/percona-toolkit.git /home/testuser/golang/src/github.com/percona/percona-toolkit && \
+
 # Clean up
     apt autoremove && \
     apt autoclean -y && \
